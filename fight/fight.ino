@@ -12,7 +12,9 @@ Sprites sprite;
 int fightsize = 32;
 bool kicking = false;
 bool jumping = false;
+bool walking = false;
 byte frameCounter = 0;
+byte frameCounter2 =0;
 int posx = 20;
 int posy = 63-fightsize;
 int dy = 0;
@@ -35,6 +37,9 @@ void loop() {
 
   arduboy.clear();
   arduboy.pollButtons();
+
+  //idle by default : reset walking boolean
+  walking = false;
   
   // Manage input
   if(arduboy.justPressed(A_BUTTON) and !kicking){
@@ -42,12 +47,15 @@ void loop() {
   }
   if(arduboy.pressed(LEFT_BUTTON) and !kicking){
     posx-=2;
+    if(!jumping) walking = true;
   }
    if(arduboy.pressed(RIGHT_BUTTON) and !kicking){
     posx+=2;
+    if(!jumping) walking = true;
   }
   if(arduboy.justPressed(UP_BUTTON) and !jumping){
     jumping=true;
+    walking = false;
     dy = -10;
   }
 
@@ -74,8 +82,14 @@ void loop() {
       frameCounter=0;
       kicking = false;
     } 
-  } else{
-    sprite.drawSelfMasked(posx,posy,FIGHTER,0);
+  } else if(walking){
+    sprite.drawSelfMasked(posx,posy,WALK,frameCounter2);
+    if(arduboy.everyXFrames(5)){
+      frameCounter2++;
+      frameCounter2 %=4;
+    }
+  } else {
+    sprite.drawSelfMasked(posx,posy,WALK,0);
   }
 
   arduboy.print("x="+String(posx));
