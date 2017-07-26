@@ -6,14 +6,23 @@ Robin Dupont (N0ciple)
 
 #include <Arduboy2.h>
 #include "bitmaps.h"
-Arduboy2 arduboy;
 
+Arduboy2 arduboy;
+Sprites sprite;
 int fightsize = 32;
 bool kicking = false;
+bool jumping = false;
+byte frameCounter = 0;
+int posx = 20;
+int posy = 63-fightsize;
+int dy = 0;
+int gravity = -2;
+
 
 void setup() {
   // put your setup code here, to run once:
   arduboy.begin();
+  arduboy.setFrameRate(60);
   arduboy.clear();
 
 }
@@ -23,43 +32,57 @@ void loop() {
   if (!arduboy.nextFrame()) {
     return;
   }
-  
+
+  arduboy.clear();
   arduboy.pollButtons();
-  if(arduboy.justPressed(A_BUTTON) ){
+  
+  // Manage input
+  if(arduboy.justPressed(A_BUTTON) and !kicking){
     kicking = true;
   }
-
-  if(kicking){
-    
-    arduboy.clear();
-    arduboy.drawBitmap(63-fightsize,63-fightsize,FIGHT1,32,32,WHITE);
-    arduboy.display();  
-    delay(100); 
-    
-    arduboy.clear();
-    arduboy.drawBitmap(63-fightsize,63-fightsize,FIGHT2,32,32,WHITE);
-    arduboy.display();    
-    delay(75);
-
-    arduboy.clear();
-    arduboy.drawBitmap(63-fightsize,63-fightsize,FIGHT3,32,32,WHITE);
-    arduboy.display();    
-    delay(75);
-
-    arduboy.clear();
-    arduboy.drawBitmap(63-fightsize,63-fightsize,FIGHT2,32,32,WHITE);
-    arduboy.display();  
-    delay(100);
-
-    arduboy.clear();
-    arduboy.drawBitmap(63-fightsize,63-fightsize,FIGHT1,32,32,WHITE);
-    arduboy.display();  
-
-    kicking = false;
+  if(arduboy.pressed(LEFT_BUTTON) and !kicking){
+    posx-=2;
+  }
+   if(arduboy.pressed(RIGHT_BUTTON) and !kicking){
+    posx+=2;
+  }
+  if(arduboy.justPressed(UP_BUTTON) and !jumping){
+    jumping=true;
+    dy = -10;
   }
 
+  posx = max(1,posx);
+  posx = min(posx,127-fightsize);
+
+  if(jumping){
+    posy += dy;
+    if(arduboy.everyXFrames(2)){
+      dy -= gravity;
+    }
+    posy = min(max(0,posy),63-fightsize);
     
-    arduboy.display();
+    if(posy>=63-fightsize){
+      jumping = false;
+      dy=0;
+    }
+  }
+  
+  if(kicking){
+    sprite.drawSelfMasked(posx,posy,FIGHTER,frameCounter);
+    if(arduboy.everyXFrames(4)) frameCounter++;
+    if(frameCounter>4){
+      frameCounter=0;
+      kicking = false;
+    } 
+  } else{
+    sprite.drawSelfMasked(posx,posy,FIGHTER,0);
+  }
+
+  arduboy.print("x="+String(posx));
+  arduboy.print("\ny="+String(posy));
+  arduboy.print("\ndy="+String(dy));
+
+  arduboy.display();
 
 
 
