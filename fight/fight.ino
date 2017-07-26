@@ -13,8 +13,10 @@ int fightsize = 32;
 bool kicking = false;
 bool jumping = false;
 bool walking = false;
+bool punching = false;
 byte frameCounter = 0;
 byte frameCounter2 =0;
+byte frameCounter3 = 0;
 int posx = 20;
 int posy = 63-fightsize;
 int dy = 0;
@@ -42,22 +44,27 @@ void loop() {
   walking = false;
   
   // Manage input
-  if(arduboy.justPressed(A_BUTTON) and !kicking){
+  if(arduboy.justPressed(A_BUTTON) and !kicking and !punching){
     kicking = true;
   }
-  if(arduboy.pressed(LEFT_BUTTON) and !kicking){
+  if(arduboy.pressed(LEFT_BUTTON) and !kicking and !punching){
     posx-=2;
     if(!jumping) walking = true;
   }
-   if(arduboy.pressed(RIGHT_BUTTON) and !kicking){
+   if(arduboy.pressed(RIGHT_BUTTON) and !kicking and !punching){
     posx+=2;
     if(!jumping) walking = true;
   }
-  if(arduboy.justPressed(UP_BUTTON) and !jumping){
+  if(arduboy.justPressed(UP_BUTTON) and !jumping and !kicking and !punching){
     jumping=true;
     walking = false;
     dy = -10;
   }
+  
+  if(arduboy.justPressed(B_BUTTON) and !kicking and !punching){
+    punching = true;
+  }
+
 
   posx = max(1,posx);
   posx = min(posx,127-fightsize);
@@ -84,11 +91,19 @@ void loop() {
     } 
   } else if(walking){
     sprite.drawSelfMasked(posx,posy,WALK,frameCounter2);
-    if(arduboy.everyXFrames(5)){
+    if(arduboy.everyXFrames(4)){
       frameCounter2++;
       frameCounter2 %=4;
     }
+  } else if(punching){
+     sprite.drawSelfMasked(posx,posy,PUNCH,frameCounter3);
+    if(arduboy.everyXFrames(4)) frameCounter3++;
+    if(frameCounter3>3){
+      frameCounter3=0;
+      punching=false;
+    }
   } else {
+  
     sprite.drawSelfMasked(posx,posy,WALK,0);
   }
 
