@@ -9,6 +9,7 @@ Robin Dupont (N0ciple)
 
 Arduboy2 arduboy;
 Sprites sprite;
+ 
 int fightsize = 32;
 bool kicking = false;
 bool jumping = false;
@@ -20,7 +21,7 @@ byte frameCounter3 = 0;
 int posx = 20;
 int posy = 63-fightsize;
 int dy = 0;
-int gravity = -2;
+int gravity = -1;
 
 
 void setup() {
@@ -58,7 +59,7 @@ void loop() {
   if(arduboy.justPressed(UP_BUTTON) and !jumping and !kicking and !punching){
     jumping=true;
     walking = false;
-    dy = -10;
+    dy = -5;
   }
   
   if(arduboy.justPressed(B_BUTTON) and !kicking and !punching){
@@ -69,20 +70,9 @@ void loop() {
   posx = max(1,posx);
   posx = min(posx,127-fightsize);
 
-  if(jumping){
-    posy += dy;
-    if(arduboy.everyXFrames(2)){
-      dy -= gravity;
-    }
-    posy = min(max(0,posy),63-fightsize);
-    
-    if(posy>=63-fightsize){
-      jumping = false;
-      dy=0;
-    }
-  }
+ 
   
-  if(kicking){
+  if(kicking and !jumping){
     sprite.drawSelfMasked(posx,posy,FIGHTER,frameCounter);
     if(arduboy.everyXFrames(4)) frameCounter++;
     if(frameCounter>4){
@@ -95,12 +85,26 @@ void loop() {
       frameCounter2++;
       frameCounter2 %=4;
     }
-  } else if(punching){
+  } else if(punching and !jumping){
      sprite.drawSelfMasked(posx,posy,PUNCH,frameCounter3);
-    if(arduboy.everyXFrames(4)) frameCounter3++;
+    if(arduboy.everyXFrames(3)) frameCounter3++;
     if(frameCounter3>3){
       frameCounter3=0;
       punching=false;
+    }
+  } else  if(jumping){
+    posy += dy;
+    if(arduboy.everyXFrames(4)){
+      dy -= gravity;
+    }
+    if(dy<=0){ sprite.drawSelfMasked(posx,posy,JUMP,0); }
+    if(dy>0){ sprite.drawSelfMasked(posx,posy,JUMP,1); }
+    
+    posy = min(max(0,posy),63-fightsize);
+    
+    if(posy>=63-fightsize){
+      jumping = false;
+      dy=0;
     }
   } else {
   
