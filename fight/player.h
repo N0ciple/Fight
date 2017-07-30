@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "global.h"
+#include "camera.h"
 
 #define STATIC 0
 #define KICKING 1
@@ -22,7 +23,7 @@ struct Player {
   byte spriteSize;
   byte state; // state of the player = 0: idle, 1: kicking, 2: jumping, 3: walking, 4: punching 
   byte x;
-  int8_t y;
+  int y;
   int dy;
 };
 
@@ -115,18 +116,46 @@ void drawPlayer(){
         sprite.drawPlusMask(player.x,player.y,JUMP,1); 
       }
       
-      player.y = min(max(0,player.y),63-player.spriteSize);
+      //player.y = min(max(0,player.y),63-player.spriteSize);
       
-      if(player.y>=63-player.spriteSize){
+      if(camera.offy >= 0 and player.dy >0){
+        player.y=63-player.spriteSize;
         player.state=STATIC;
         player.dy=0;
+        camera.offy = 0;
       }
+      
+      /*if(player.y>=63-player.spriteSize){
+        player.state=STATIC;
+        player.dy=0;
+      }*/
       break;
       
     case STATIC :
       sprite.drawPlusMask(player.x,player.y,WALK,0);
       break;
   }
+
+  // Manage camera on X-axis
+  if(player.x > WIDTH/2 + camera.pLimx){
+    player.x = WIDTH/2 + camera.pLimx;
+    camera.offx += 2;
+  } else if(player.x < WIDTH/2 - camera.pLimx){
+        player.x = WIDTH/2 - camera.pLimx;
+            camera.offx -= 2;
+  }
+
+  // Manage camera on Y-axis
+  arduboy.setCursor(30,0);
+  if(player.y >63-player.spriteSize){
+    arduboy.print("C DOWN");
+    player.y = 63-player.spriteSize;
+    camera.offy += player.dy;
+  } else if(player.y < HEIGHT/2 - camera.pLimy){
+    arduboy.print("C UP");
+    player.y = HEIGHT/2 - camera.pLimy;
+    camera.offy += player.dy;
+  }  
 
 }
 

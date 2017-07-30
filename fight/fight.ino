@@ -7,8 +7,8 @@ Robin Dupont (N0ciple)
 
 #include "global.h"
 #include "player.h"
-
- 
+#include "camera.h"
+#include "enemy.h"
 
 
 void setup() {
@@ -21,7 +21,7 @@ void setup() {
   arduboy.audio.begin();
 
   initPlayer();
-  
+  initEnemy();
   arduboy.setFrameRate(60);
   arduboy.clear();
   
@@ -33,18 +33,16 @@ void loop() {
   if (!arduboy.nextFrame()) return;
   arduboy.clear();
   arduboy.pollButtons();
-
   
-  for(int i = 0;i<2;i++){
-    for(int j = 0; j<16;j++){
-      sprite.drawSelfMasked(j*8,HEIGHT-i*8,BRICK,0);
-    }
-  }
-
-  
+  arduboy.print(camera.offy);
+  arduboy.setCursor(0,10);
+  arduboy.print(player.state);
+  arduboy.setCursor(0,20);
+  arduboy.print(player.dy);
+  drawBackground();
   handleInputs();
+  drawEnemy();
   drawPlayer();
-  
   arduboy.display();
 
 
