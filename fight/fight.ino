@@ -13,9 +13,18 @@ Robin Dupont (N0ciple)
 
 void setup() {
   
-  arduboy.begin();
+  //arduboy.begin();
+  
+  arduboy.boot();
+  arduboy.blank();
+  arduboy.flashlight();
+  arduboy.audio.begin();
+
+  initPlayer();
+  
   arduboy.setFrameRate(60);
   arduboy.clear();
+  
 
 }
 
