@@ -80,7 +80,7 @@ void drawPlayer(){
   switch(player.state){
     case KICKING :
    
-      sprite.drawSelfMasked(player.x,player.y,FIGHTER,frameCounter);
+      sprite.drawPlusMask(player.x,player.y,KICK,frameCounter);
       if(arduboy.everyXFrames(4)) frameCounter++;
       if(frameCounter>4){
         frameCounter=0;
@@ -89,7 +89,7 @@ void drawPlayer(){
       break;
       
     case WALKING :
-      sprite.drawSelfMasked(player.x,player.y,WALK,frameCounter2);
+      sprite.drawPlusMask(player.x,player.y,WALK,frameCounter2);
       if(arduboy.everyXFrames(4)){
         frameCounter2++;
         frameCounter2 %=4;
@@ -97,7 +97,7 @@ void drawPlayer(){
       break;
       
     case PUNCHING :
-       sprite.drawSelfMasked(player.x,player.y,PUNCH,frameCounter3);
+       sprite.drawPlusMask(player.x,player.y,PUNCH,frameCounter3);
       if(arduboy.everyXFrames(3)) frameCounter3++;
       if(frameCounter3>3){
         frameCounter3=0;
@@ -110,8 +110,10 @@ void drawPlayer(){
       if(arduboy.everyXFrames(4)){
         player.dy -= gravity;
       }
-      if(player.dy<=0){ sprite.drawSelfMasked(player.x,player.y,JUMP,0); }
-      if(player.dy>0){ sprite.drawSelfMasked(player.x,player.y,JUMP,1); }
+      if(player.dy<=0){ sprite.drawPlusMask(player.x,player.y,JUMP,0); 
+      } else { 
+        sprite.drawPlusMask(player.x,player.y,JUMP,1); 
+      }
       
       player.y = min(max(0,player.y),63-player.spriteSize);
       
@@ -122,7 +124,7 @@ void drawPlayer(){
       break;
       
     case STATIC :
-      sprite.drawSelfMasked(player.x,player.y,WALK,0);
+      sprite.drawPlusMask(player.x,player.y,WALK,0);
       break;
   }
 

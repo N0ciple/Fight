@@ -34,6 +34,14 @@ void loop() {
   arduboy.clear();
   arduboy.pollButtons();
 
+  
+  for(int i = 0;i<2;i++){
+    for(int j = 0; j<16;j++){
+      sprite.drawSelfMasked(j*8,HEIGHT-i*8,BRICK,0);
+    }
+  }
+
+  
   handleInputs();
   drawPlayer();
   
