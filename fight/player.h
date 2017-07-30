@@ -119,7 +119,7 @@ void drawPlayer(){
       //player.y = min(max(0,player.y),63-player.spriteSize);
       
       if(camera.offy >= 0 and player.dy >0){
-        player.y=63-player.spriteSize;
+        player.y=61-player.spriteSize;
         player.state=STATIC;
         player.dy=0;
         camera.offy = 0;
@@ -147,8 +147,8 @@ void drawPlayer(){
 
   // Manage camera on Y-axis
   arduboy.setCursor(30,0);
-  if(player.y >63-player.spriteSize){
-    player.y = 63-player.spriteSize;
+  if(player.y >61-player.spriteSize){
+    player.y = 61-player.spriteSize;
     camera.offy += player.dy;
   } else if(player.y < HEIGHT/2 - camera.pLimy){
     player.y = HEIGHT/2 - camera.pLimy;

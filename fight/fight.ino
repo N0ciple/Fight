@@ -34,6 +34,8 @@ void loop() {
   arduboy.clear();
   arduboy.pollButtons();
   arduboy.print(arduboy.cpuLoad());
+  arduboy.setCursor(0,10);
+  arduboy.print(String(camera.offx) +" "+String(camera.offy));
   drawBackground();
   handleInputs();
   drawEnemy();
