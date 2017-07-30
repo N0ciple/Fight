@@ -148,11 +148,9 @@ void drawPlayer(){
   // Manage camera on Y-axis
   arduboy.setCursor(30,0);
   if(player.y >63-player.spriteSize){
-    arduboy.print("C DOWN");
     player.y = 63-player.spriteSize;
     camera.offy += player.dy;
   } else if(player.y < HEIGHT/2 - camera.pLimy){
-    arduboy.print("C UP");
     player.y = HEIGHT/2 - camera.pLimy;
     camera.offy += player.dy;
   }  

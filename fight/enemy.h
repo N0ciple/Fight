@@ -8,6 +8,7 @@ struct Enemy {
   byte x;
   int y;
   int dy;
+  bool frontOffP; // Bolean : true if the enemy is displayed in front of the player
 };
 
 
@@ -17,9 +18,10 @@ struct Enemy enemy;
 void initEnemy(){
   enemy.state=0;
   enemy.spriteSize=32;
-  enemy.x= 40;
+  enemy.x= 90;
   enemy.y= 63-player.spriteSize;
   enemy.dy=0;
+  
 }
 
 void drawEnemy(){

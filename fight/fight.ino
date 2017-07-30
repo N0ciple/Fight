@@ -33,12 +33,7 @@ void loop() {
   if (!arduboy.nextFrame()) return;
   arduboy.clear();
   arduboy.pollButtons();
-  
-  arduboy.print(camera.offy);
-  arduboy.setCursor(0,10);
-  arduboy.print(player.state);
-  arduboy.setCursor(0,20);
-  arduboy.print(player.dy);
+  arduboy.print(arduboy.cpuLoad());
   drawBackground();
   handleInputs();
   drawEnemy();
