@@ -44,7 +44,15 @@ struct Enemy createEnemy(int xLoc, int yLoc){
 // draw enemies
 
 void drawEnemy(Enemy myEnemy){
-  sprite.drawPlusMask(myEnemy.x-camera.offx,myEnemy.y-camera.offy,WALK,0);
+  switch(player.state){
+    case KICKING :
+      sprite.drawPlusMask(player.x,player.y,WALK,frameCounter2);
+      if(arduboy.everyXFrames(4)){
+        frameCounter2++;
+        frameCounter2 %=4;
+      }
+      break;
+      sprite.drawPlusMask(myEnemy.x-camera.offx,myEnemy.y-camera.offy,WALK,0);
 }
 
 
