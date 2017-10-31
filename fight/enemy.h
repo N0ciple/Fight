@@ -15,17 +15,36 @@ struct Enemy {
 
 struct Enemy enemy;
 
+struct Enemy enemyArray[10];
+
+
 void initEnemy(){
   enemy.state=0;
   enemy.spriteSize=32;
   enemy.x= 90;
   enemy.y= 63-player.spriteSize;
   enemy.dy=0;
-  
 }
 
-void drawEnemy(){
-  sprite.drawPlusMask(enemy.x-camera.offx,enemy.y-camera.offy,WALK,0);
+
+struct Enemy createEnemy(int xLoc, int yLoc){
+  struct Enemy locEnemy;
+  
+  locEnemy.state=0;
+  locEnemy.spriteSize=32;
+  locEnemy.x= xLoc;
+  locEnemy.y= yLoc-player.spriteSize;
+  locEnemy.dy=0;
+
+  return locEnemy;
+}
+
+
+
+// draw enemies
+
+void drawEnemy(Enemy myEnemy){
+  sprite.drawPlusMask(myEnemy.x-camera.offx,myEnemy.y-camera.offy,WALK,0);
 }
 
 
