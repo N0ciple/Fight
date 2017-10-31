@@ -25,10 +25,11 @@ void setup() {
   arduboy.setFrameRate(60);
   arduboy.clear();
 
+  arduboy.initRandomSeed();
   
   // populate the enemy array
   for(int j=0; j<9; j++) {
-    enemyArray[j] = createEnemy(j*12,63);
+    enemyArray[j] = createEnemy(random(512),63);
   }
   
 

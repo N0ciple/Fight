@@ -2,6 +2,9 @@
 #define ENEMY_H
 #include "global.h"
 
+byte frameCounterWalking = 0;
+
+
 struct Enemy {
   byte spriteSize;
   byte state; // state of the player = 0: idle, 1: kicking, 2: jumping, 3: walking, 4: punching 
@@ -44,15 +47,11 @@ struct Enemy createEnemy(int xLoc, int yLoc){
 // draw enemies
 
 void drawEnemy(Enemy myEnemy){
-  switch(player.state){
-    case KICKING :
-      sprite.drawPlusMask(player.x,player.y,WALK,frameCounter2);
-      if(arduboy.everyXFrames(4)){
-        frameCounter2++;
-        frameCounter2 %=4;
-      }
-      break;
+  switch(myEnemy.state){
+    case STATIC :
       sprite.drawPlusMask(myEnemy.x-camera.offx,myEnemy.y-camera.offy,WALK,0);
+      break;
+  }
 }
 
 
