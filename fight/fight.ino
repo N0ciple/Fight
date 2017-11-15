@@ -24,6 +24,13 @@ void setup() {
   initEnemy();
   arduboy.setFrameRate(60);
   arduboy.clear();
+
+  arduboy.initRandomSeed();
+  
+  // populate the enemy array
+  for(int j=0; j<9; j++) {
+    enemyArray[j] = createEnemy(random(512),63);
+  }
   
 
 }
@@ -34,11 +41,14 @@ void loop() {
   arduboy.clear();
   arduboy.pollButtons();
   arduboy.print(arduboy.cpuLoad());
-  arduboy.setCursor(0,10);
-  arduboy.print(String(camera.offx) +" "+String(camera.offy));
+  //arduboy.setCursor(0,10);
+  //arduboy.print(String(camera.offx) +" "+String(camera.offy));
   drawBackground();
   handleInputs();
-  drawEnemy();
+  for( int i=0; i<9;i++){
+    drawEnemy(enemyArray[i]);
+  }
+  drawEnemy(enemy);
   drawPlayer();
   arduboy.display();
 
