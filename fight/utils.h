@@ -72,8 +72,10 @@ void manageCollision(Player *myPlayer, Enemy *myEnemy){
       break;
     case JUMPING:
       if(isColliding(myPlayer, myEnemy, colision_offsets[3]) && myPlayer->vulnerable){
-        myPlayer->vulnerable = false;
-        myPlayer->hp--;
+         if(myEnemy->hp>0){
+          myPlayer->vulnerable = false;
+          myPlayer->hp--;
+         }
       }
       break;
     

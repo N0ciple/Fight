@@ -30,7 +30,7 @@ void setup() {
   
   // populate the enemy array
   for(int j=0; j<9; j++) {
-    enemyArray[j] = createEnemy(50*(j+1),63);
+    enemyArray[j] = createEnemy(50*(j+1),61);
   }
   
 
@@ -48,12 +48,13 @@ void loop() {
   handleInputs();
   updatePlayer();
   for( int i=0; i<9;i++){
+    updateEnemy(&enemyArray[i]);
     drawEnemy(&enemyArray[i]);
     manageCollision(&player,&enemyArray[i]);
+    arduboy.print(enemyArray[i].visible);
+    //arduboy.print(enemyArray[i].state);
   }
-  arduboy.print(player.hp);
-  arduboy.print(" | ");
-  arduboy.print(player.vulnerable);
+
 
 
 

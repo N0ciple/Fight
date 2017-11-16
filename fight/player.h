@@ -15,7 +15,8 @@ Robin Dupont (N0ciple)
 #define JUMPING 2
 #define WALKING 3
 #define PUNCHING 4
-#define DYING 5 
+#define DYING 5
+#define DEAD 6 
 
 #define PUNCH_DAMAGE 1
 #define KICK_DAMAGE 2
@@ -45,7 +46,7 @@ void initPlayer(){
   player.state=0;
   player.spriteSize=32;
   player.x= 20;
-  player.y= 63-player.spriteSize;
+  player.y= 61-player.spriteSize;
   player.dy=0;
   player.hp=10;
   player.vulnerable=true;
