@@ -21,7 +21,6 @@ void setup() {
   arduboy.audio.begin();
 
   initPlayer();
-  initEnemy();
   arduboy.setFrameRate(60);
   arduboy.clear();
 
@@ -40,15 +39,18 @@ void loop() {
   if (!arduboy.nextFrame()) return;
   arduboy.clear();
   arduboy.pollButtons();
-  arduboy.print(arduboy.cpuLoad());
+  //arduboy.print(arduboy.cpuLoad());
   //arduboy.setCursor(0,10);
   //arduboy.print(String(camera.offx) +" "+String(camera.offy));
   drawBackground();
   handleInputs();
   for( int i=0; i<9;i++){
-    drawEnemy(enemyArray[i]);
+    drawEnemy(&enemyArray[i]);
+  
   }
-  drawEnemy(enemy);
+  arduboy.print(enemyArray[0].frcount);
+
+
   drawPlayer();
   arduboy.display();
 

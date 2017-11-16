@@ -7,37 +7,28 @@ byte frameCounterWalking = 0;
 
 struct Enemy {
   byte spriteSize;
-  byte state; // state of the player = 0: idle, 1: kicking, 2: jumping, 3: walking, 4: punching 
+  byte state;       // state of the enemy = 0: idle, 1: kicking, 2: jumping, 3: walking, 4: punching 
   byte x;
   int y;
   int dy;
-  bool frontOffP; // Bolean : true if the enemy is displayed in front of the player
+  bool frontOffP;   // Bolean : true if the enemy is displayed in front of the player
+  byte frcount;     // frame counter
+  byte hp;
 };
 
 
-
-struct Enemy enemy;
-
 struct Enemy enemyArray[10];
-
-
-void initEnemy(){
-  enemy.state=0;
-  enemy.spriteSize=32;
-  enemy.x= 90;
-  enemy.y= 63-player.spriteSize;
-  enemy.dy=0;
-}
-
 
 struct Enemy createEnemy(int xLoc, int yLoc){
   struct Enemy locEnemy;
   
-  locEnemy.state=0;
+  locEnemy.state=STATIC;
   locEnemy.spriteSize=32;
   locEnemy.x= xLoc;
   locEnemy.y= yLoc-player.spriteSize;
   locEnemy.dy=0;
+  locEnemy.frcount = 2;
+  loc.Enemy.hp = 3;
 
   return locEnemy;
 }
@@ -46,10 +37,12 @@ struct Enemy createEnemy(int xLoc, int yLoc){
 
 // draw enemies
 
-void drawEnemy(Enemy myEnemy){
-  switch(myEnemy.state){
+void drawEnemy(Enemy *myEnemy){
+  switch(myEnemy->state){
     case STATIC :
-      sprite.drawPlusMask(myEnemy.x-camera.offx,myEnemy.y-camera.offy,WALK,0);
+      if(arduboy.everyXFrames(7)) myEnemy->frcount++;
+      if(myEnemy->frcount >3)   myEnemy->frcount = 0;
+      sprite.drawPlusMask(myEnemy->x-camera.offx,myEnemy->y-camera.offy,ENEMY1_WALK,myEnemy->frcount);
       break;
   }
 }
