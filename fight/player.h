@@ -1,3 +1,9 @@
+/*
+Fight - https://github.com/n0ciple/fight
+July 25th, 2017
+Robin Dupont (N0ciple)
+*/
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -9,7 +15,10 @@
 #define JUMPING 2
 #define WALKING 3
 #define PUNCHING 4
+#define DYING 5 
 
+#define PUNCH_DAMAGE 1
+#define KICK_DAMAGE 2
 
 byte frameCounter = 0;
 byte frameCounter2 =0;
@@ -25,6 +34,9 @@ struct Player {
   byte x;
   int y;
   int dy;
+  byte hp;
+  bool vulnerable;
+  byte vulncount;
 };
 
 struct Player player;
@@ -35,6 +47,9 @@ void initPlayer(){
   player.x= 20;
   player.y= 63-player.spriteSize;
   player.dy=0;
+  player.hp=10;
+  player.vulnerable=true;
+  player.vulncount=0;
 }
 
 
@@ -72,11 +87,43 @@ void handleInputs() {
 }
 
 
+void updatePlayer(){
+  if(!player.vulnerable){
+    if(arduboy.everyXFrames(2)){
+      player.vulncount++;
+    }
+    if(player.vulncount>30){
+      player.vulnerable = true;
+      player.vulncount=0;
+    }
+  }
+}
+
+
 void drawPlayer(){
 
   // make sure the player is not exceeding the limits of the screen
   player.x = max(2,player.x);
   player.x = min(player.x,127-player.spriteSize);
+
+    // Manage camera on X-axis
+  if(player.x > WIDTH/2 + camera.pLimx){
+    player.x = WIDTH/2 + camera.pLimx;
+    camera.offx += 2;
+  } else if(player.x < WIDTH/2 - camera.pLimx){
+        player.x = WIDTH/2 - camera.pLimx;
+            camera.offx -= 2;
+  }
+
+  // Manage camera on Y-axis
+  arduboy.setCursor(30,0);
+  if(player.y >61-player.spriteSize){
+    player.y = 61-player.spriteSize;
+    camera.offy += player.dy;
+  } else if(player.y < HEIGHT/2 - camera.pLimy){
+    player.y = HEIGHT/2 - camera.pLimy;
+    camera.offy += player.dy;
+  }  
   
   switch(player.state){
     case KICKING :
@@ -135,25 +182,6 @@ void drawPlayer(){
       sprite.drawPlusMask(player.x,player.y,WALK,0);
       break;
   }
-
-  // Manage camera on X-axis
-  if(player.x > WIDTH/2 + camera.pLimx){
-    player.x = WIDTH/2 + camera.pLimx;
-    camera.offx += 2;
-  } else if(player.x < WIDTH/2 - camera.pLimx){
-        player.x = WIDTH/2 - camera.pLimx;
-            camera.offx -= 2;
-  }
-
-  // Manage camera on Y-axis
-  arduboy.setCursor(30,0);
-  if(player.y >61-player.spriteSize){
-    player.y = 61-player.spriteSize;
-    camera.offy += player.dy;
-  } else if(player.y < HEIGHT/2 - camera.pLimy){
-    player.y = HEIGHT/2 - camera.pLimy;
-    camera.offy += player.dy;
-  }  
 
 }
 

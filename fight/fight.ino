@@ -9,11 +9,13 @@ Robin Dupont (N0ciple)
 #include "player.h"
 #include "camera.h"
 #include "enemy.h"
-
+#include "utils.h"
 
 void setup() {
   
   //arduboy.begin();
+
+  Serial.begin(9600);
   
   arduboy.boot();
   arduboy.blank();
@@ -28,7 +30,7 @@ void setup() {
   
   // populate the enemy array
   for(int j=0; j<9; j++) {
-    enemyArray[j] = createEnemy(random(512),63);
+    enemyArray[j] = createEnemy(50*(j+1),63);
   }
   
 
@@ -44,11 +46,16 @@ void loop() {
   //arduboy.print(String(camera.offx) +" "+String(camera.offy));
   drawBackground();
   handleInputs();
+  updatePlayer();
   for( int i=0; i<9;i++){
     drawEnemy(&enemyArray[i]);
-  
+    manageCollision(&player,&enemyArray[i]);
   }
-  arduboy.print(enemyArray[0].frcount);
+  arduboy.print(player.hp);
+  arduboy.print(" | ");
+  arduboy.print(player.vulnerable);
+
+
 
 
   drawPlayer();
